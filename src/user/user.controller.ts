@@ -1,18 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('user')
 export class UserController {
-    @Get("list")
-    getList() {
-      return [
-        {
-          //ここがレスポンスこれをユーザーの情報にする!!
-          title: "牛乳を買いに行く",
-          due_on: "2022-12-24",
-          done: false
-        }
-      ]
-    }
 
+  constructor(
+    private prisma: PrismaService
+  ){}
+
+  @Get("list")
+  async getList() { 
+    const result = await this.prisma.user.findMany()
+    return [ 
+      ...result
+    ]  
+  }
 }
-
